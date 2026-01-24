@@ -10,35 +10,32 @@
 
 Adafruit_TFTLCD tft;
 
-void setup() {
-  Serial.begin(9600);
+void fillRandomFloatArray(float arr[], uint16_t size) {
+  for (uint16_t i = 0; i < size; i++) {
+    arr[i] = sin(i/10.0)*50;
+  }
+}
 
+void setup() {
   tft.begin(0x9325);
 
   tft.reset();
   tft.fillScreen(0x0000);
-
-  float data[50];
-  fillRandomFloatArray(data, 50);
-
-
-  drawPointDiagram(30, 20, 200, 64, data, 0, 50, 0xF450);
 }
 
 void loop() {
+  float data[200];
+  fillRandomFloatArray(data, 200);
+
+  tft.fillScreen(BLACK);
+
+  drawPointDiagram(30, 20, 200, 64, data, 0, 200, 0xF456);
+
+  delay(5000);
 }
 
-void fillRandomFloatArray(float arr[], int size) {
-  for (int i = 0; i < size; i++) {
-    arr[i] = sin(i/10.0)*50;  // 0.00 → 100.00
-  }
-}
-
-void drawPointDiagram(int x, int y, int width, int height, float data[], int start, int end, uint16_t color){
-
-  for(int i = 0; i<height/10; i++){
-    tft.drawFastHLine(x, y+(i*10),width, GRAY);
-  }
+//This needs more memory optimization. After stress-testing it seems to be able to handle ~400 data values in the array.
+void drawPointDiagram(uint16_t x, uint16_t y, uint16_t width, uint16_t height, float data[], uint16_t start, uint16_t end, uint16_t color){
 
   /*tft.drawFastVLine(x-2,y-2,height+6,WHITE);
   tft.drawFastVLine(x-3,y-2,height+6,WHITE);*/
@@ -46,7 +43,7 @@ void drawPointDiagram(int x, int y, int width, int height, float data[], int sta
   //retrieving the highest and lowest number in the array:
   float max_num = data[start];
   float min_num = data[start];
-  for(int i = start; i<end; i++){
+  for(uint16_t i = start; i<end; i++){
     if(max_num < data[i]){
       max_num = data[i];
       continue;
@@ -57,15 +54,38 @@ void drawPointDiagram(int x, int y, int width, int height, float data[], int sta
     }
   }
 
+  //CHATGPT CODE, REPLACE LATER!!!111!!!:
+  uint8_t lineCount = height / 15; // or however many lines you want
+for (uint8_t i = 0; i <= lineCount; i++) {
+    uint16_t yLine = y + i * 15;
+    tft.drawFastHLine(x, yLine, width, GRAY);
+
+    // normalized position from top
+    float relativePos = 1.0f - ((float)(i*15) / (height-15)); 
+    int lineValue = round(min_num + relativePos * (max_num - min_num));
+
+    // draw text to the left
+    tft.setCursor(x - 17, yLine - 4);  // tweak offsets to fit
+    tft.setTextColor(WHITE);
+    tft.setTextSize(1);
+    tft.print(lineValue);           // 1 decimal place
+}
+
   //iterating through data, drawing points on screen:
-  for(int i = start; i<end; i++){
+  for(uint16_t i = start; i<end; i++){
 
     // ( value-minimum ) / ( maximum-minimum )
-    float relativePos = (data[i]-min_num)/(max_num-min_num);
-    Serial.println(relativePos);
+    float relativePos = 1.0-(constrain((data[i]-min_num)/(max_num-min_num),0.0,1.0));
 
     tft.fillCircle(
-      x + 4 + ((i - start) * width) / (end - start),
+      /* 
+      x + 1 is the starting position.
+      (int) turns everything in the next parantheses into an integer, essentially cutting off the decimal point. This is why you have (+0.5) at the end, so it essentially acts as rounding.
+      (float) turns the next parantheses, (i-start) into floating point numbers, allowing for precise calculation.
+      (i - start)*(width - 2) is basically the position of the point. width has subtracted 2 in order to cut off 2 pixels.
+      / (end-start) is how long the graph is, it needs to divide to see how much space should be between each point.
+      */
+      x + 1 + (int)(((float)(i - start) * (width - 2)) / ((end - start) - 1) + 0.5),
       y+7+((height-10)*relativePos),
       1,
       color
@@ -74,6 +94,4 @@ void drawPointDiagram(int x, int y, int width, int height, float data[], int sta
 
   //drawing bounding box:
   tft.drawRect(x,y,width+2,height,WHITE);
-
-  Serial.println(max_num);
 }
