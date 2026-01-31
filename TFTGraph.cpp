@@ -1,9 +1,13 @@
 #include "TFTGraph.h"
 #include "math.h"
 
+//Gauge:
 static double sind(double deg);
 static double cosd(double deg);
 static void drawHalfCircle(Adafruit_GFX &gfx, uint16_t xc, uint16_t yc, uint8_t r, uint16_t color);
+
+//Line/Point diagram:
+static void drawDiagramBody(Adafruit_GFX &gfx, uint16_t x, uint16_t y, uint16_t width, uint16_t height);
 
 void drawGauge(Adafruit_GFX &gfx,
                             uint16_t x, uint16_t y, uint8_t r,
@@ -35,6 +39,7 @@ void drawGauge(Adafruit_GFX &gfx,
       offset = true;
     }
 
+    //Only draw if "i" is an even number (drawing every iteration would get a bit much.)
     if( i % 2 == 0){
       gfx.setCursor(
         x+sind(i*10)*(r-5)+((String(currentStep).length()*2)*(offset*-1)),
@@ -95,27 +100,7 @@ void drawPointDiagram(Adafruit_GFX &gfx, uint16_t x, uint16_t y, uint16_t width,
   start = min(start, end);
   min = min(min, max);
 
-  /*gfx.drawFastVLine(x-2,y-2,height+6,WHITE);
-  gfx.drawFastVLine(x-3,y-2,height+6,WHITE);*/
-
-  uint8_t lines = (height / 15) + 1;
-  for(uint8_t i = 0; i < lines ; i++){
-    int yPos = y + i * 15;
-    if (yPos > y + height){
-      break;
-    }
-
-    gfx.drawFastHLine(x,y+(i*15),width, 0x8410);
-
-    float value = max - ((float)i / (lines - 1)) * (max - min);
-
-    String str = String(value,1);
-
-    gfx.setCursor((x - 3)-(6*str.length()), (y+(i*15))-4);
-    gfx.setTextColor(0xFFFF);
-    gfx.setTextSize(1);
-    gfx.print(value,1);
-  }
+  drawDiagramBody(gfx, x, y, width, height);
 
   //iterating through data, drawing points on screen:
   for(uint16_t i = start; i<end; i++){
@@ -137,9 +122,6 @@ void drawPointDiagram(Adafruit_GFX &gfx, uint16_t x, uint16_t y, uint16_t width,
       color
     );
   }
-
-  //drawing bounding box:
-  gfx.drawRect(x,y,width+2,height,0xFFFF);
 }
 
 void drawLineDiagram(Adafruit_GFX &gfx, uint16_t x, uint16_t y, uint16_t width, uint16_t height, float data[], uint16_t start, uint16_t end, float min, float max, uint16_t color){
@@ -152,27 +134,7 @@ void drawLineDiagram(Adafruit_GFX &gfx, uint16_t x, uint16_t y, uint16_t width, 
   start = min(start, end);
   min = min(min, max);
 
-  /*gfx.drawFastVLine(x-2,y-2,height+6,WHITE);
-  gfx.drawFastVLine(x-3,y-2,height+6,WHITE);*/
-
-  uint8_t lines = (height / 15) + 1;
-  for(uint8_t i = 0; i < lines ; i++){
-    int yPos = y + i * 15;
-    if (yPos > y + height){
-      break;
-    }
-
-    gfx.drawFastHLine(x,y+(i*15),width, 0x8410);
-
-    float value = max - ((float)i / (lines - 1)) * (max - min);
-
-    String str = String(value,1);
-
-    gfx.setCursor((x - 3)-(6*str.length()), (y+(i*15))-4);
-    gfx.setTextColor(0xFFFF);
-    gfx.setTextSize(1);
-    gfx.print(value,1);
-  }
+  drawDiagramBody(gfx, x, y, width, height);
 
   int oldX = 0;
   int oldY = 0;
@@ -196,6 +158,27 @@ void drawLineDiagram(Adafruit_GFX &gfx, uint16_t x, uint16_t y, uint16_t width, 
       gfx.drawLine(oldX,oldY,newX,newY,color);
       gfx.drawLine(oldX,oldY-1,newX,newY-1,color);
     }
+  }
+}
+
+static void drawDiagramBody(Adafruit_GFX &gfx, uint16_t x, uint16_t y, uint16_t width, uint16_t height){
+    uint8_t lines = (height / 15) + 1;
+  for(uint8_t i = 0; i < lines ; i++){
+    int yPos = y + i * 15;
+    if (yPos > y + height){
+      break;
+    }
+
+    gfx.drawFastHLine(x,y+(i*15),width, 0x8410);
+
+    float value = max - ((float)i / (lines - 1)) * (max - min);
+
+    String str = String(value,1);
+
+    gfx.setCursor((x - 3)-(6*str.length()), (y+(i*15))-4);
+    gfx.setTextColor(0xFFFF);
+    gfx.setTextSize(1);
+    gfx.print(value,1);
   }
 
   //drawing bounding box:
