@@ -26,6 +26,8 @@ class TFTGraph {
 
         void drawBarChart(int x, int y, uint16_t width, uint16_t height, float data[], float start, float end, uint16_t color);
 
+        void drawScatterPlot(int x, int y, uint16_t width, uint16_t height, float data[][3], int start, int end, uint16_t colors[]);
+
     private:
         Adafruit_TFTLCD &_gfx;
 };

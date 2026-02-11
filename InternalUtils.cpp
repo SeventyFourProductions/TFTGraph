@@ -65,3 +65,51 @@ void InternalUtils::drawHalfCircle(Adafruit_TFTLCD &gfx, uint16_t xc, uint16_t y
         }
     }
 }
+
+void InternalUtils::drawScatterBody(Adafruit_TFTLCD &gfx, int x, int y, uint16_t width, uint16_t height, float xMin, float xMax, float yMin, float yMax){
+  //Horizontal:
+  for (uint8_t i = 0; ; i++) {
+    int xPos = x + i * 30;
+    if (xPos > x + width) break;
+
+    gfx.drawFastVLine(xPos,y , height, 0x8410);
+
+    float t = (float)(xPos - x) / width;
+    float value = xMin + t * (xMax - xMin);
+
+	  if ((x + width) - (x+(i * 30)) < 10) break;
+
+    String str = String(value, 1);
+    gfx.setCursor(xPos-4,y+height+10);
+    gfx.setTextColor(0xFFFF);
+    gfx.setTextSize(1);
+    gfx.print(value, 1);
+  }
+
+  gfx.drawFastVLine(x+width, y,height, 0x8410);
+  gfx.setCursor(x - 3 - 6 * String(yMin,1).length(), y + height - 4);
+  gfx.print(yMin, 1);
+  
+  //Vertical:
+  for (uint8_t i = 0; ; i++) {
+    int yPos = y + i * 15;
+    if (yPos > y + height) break;
+
+    gfx.drawFastHLine(x, yPos, width, 0x8410);
+
+    float t = (float)(yPos - y) / height;
+    float value = yMax - t * (yMax - yMin);
+
+	  if ((y + height) - (y+(i * 15)) < 10) break;
+
+    String str = String(value, 1);
+    gfx.setCursor((x - 3) - (6 * str.length()), yPos - 4);
+    gfx.setTextColor(0xFFFF);
+    gfx.setTextSize(1);
+    gfx.print(value, 1);
+  }
+
+  gfx.drawFastHLine(x, y + height, width, 0x8410);
+  gfx.setCursor(x - 3 - 6 * String(yMin,1).length(), y + height - 4);
+  gfx.print(yMin, 1);
+}

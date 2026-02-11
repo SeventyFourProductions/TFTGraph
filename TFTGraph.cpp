@@ -152,7 +152,7 @@ void TFTGraph::drawPieChart(int x, int y, uint8_t r, float data[], int start, in
         		if (distance > r){
           			continue;
         		}
-	
+
         		//calculating angle from center to current pixel:
         		float angle = atan2(dy, dx) * 180.0 / PI;
         		if (angle < 0){
@@ -199,7 +199,8 @@ void TFTGraph::drawBarChart(int x, int y, uint16_t width, uint16_t height, float
   for(int i = start; i<(end-start); i++){
     if(data[i] > max){
       max = data[i];
-    }else if(data[i] < min){
+    }
+	if(data[i] < min){
       min = data[i];
     }
   }
@@ -223,4 +224,54 @@ void TFTGraph::drawBarChart(int x, int y, uint16_t width, uint16_t height, float
       color
     );
   }
+}
+
+void TFTGraph::drawScatterPlot(int x, int y, uint16_t width, uint16_t height, float data[][3], int start, int end, uint16_t colors[]){
+
+  //find max and min:
+  float xMax = data[0][0];
+  float yMax = data[0][1];
+  float xMin = data[0][0];
+  float yMin = data[0][1];
+  for(int i = start; i<end; i++){
+    if(data[i][0] > xMax){
+      xMax = data[i][0];
+    }
+    if(data[i][1] > yMax){
+      yMax = data[i][1];
+    }
+    if(data[i][0] < xMin){
+      xMin = data[i][0];
+    }
+    if(data[i][1] < yMin){
+      yMin = data[i][1];
+    }
+  }
+
+  InternalUtils::drawScatterBody(_gfx, x,y, width, height, xMin, xMax, yMin, yMax);
+
+  //iterating through data points:
+  for(int i = start; i<end; i++){
+    //normalizing position:
+    float normalXPos = (data[i][0] - xMin) / (xMax - xMin);
+    float normalYPos = 1.0-((data[i][1] - yMin) / (yMax - yMin));
+    
+    //horizontal line:
+    _gfx.drawFastHLine(
+      x+(width*normalXPos)-1,
+      y+(height*normalYPos),
+      3,
+      colors[(int)(data[i][2])]
+    );
+
+    //vertical line:
+    _gfx.drawFastVLine(
+      x+(width*normalXPos),
+      y+(height*normalYPos)-1,
+      3,
+      colors[(int)(data[i][2])]
+    );
+  }
+
+  _gfx.drawRect(x,y,width+2,height+2,0xFFFF);
 }
