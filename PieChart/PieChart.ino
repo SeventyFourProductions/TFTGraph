@@ -30,7 +30,5 @@ void loop(){
   };
 
   gfx.drawPieChart(120, 100, 48, data, 0, dataSize, colors, names);
-  //can also do this:
-  //TFTGraph::drawPieChart(tft,120, 100, 128, data, 0, dataSize, colors, names);
-  delay(10000);
+  delay(1000);
 }

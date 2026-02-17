@@ -16,7 +16,7 @@ void TFTGraph::drawGauge(int x, int y, uint8_t r, float value, float min, float 
     	color
 	);
 
-  	//draw base of arrow (simple point):
+  	//draw base of needle (simple point):
   	_gfx.drawFastHLine(x-1,y,3,0xFFFF);
   	_gfx.drawFastVLine(x,y-1,3,0xFFFF);
 
@@ -32,16 +32,16 @@ void TFTGraph::drawGauge(int x, int y, uint8_t r, float value, float min, float 
     	}
 
     	//Only draw if "i" is an even number (drawing every iteration would get a bit much.)
-    	if( i % 2 == 0){
-    		_gfx.setCursor(
-    	  		x+InternalUtils::sind(i*10)*(r-5)+((String(currentStep).length()*2)*(offset*-1)),
-    	  		y+InternalUtils::cosd(i*10)*(r-5)
-			);
-    		_gfx.setTextColor(0xFFFF);
-    		_gfx.setTextSize(1);
-    		_gfx.print(currentStep,0);
-    		currentStep += step;
-    	}
+    	if( i % 2 != 0) continue;
+
+    	_gfx.setCursor(
+    	  	x+InternalUtils::sind(i*10)*(r-5)+((String(currentStep).length()*2)*(offset*-1)),
+    	  	y+InternalUtils::cosd(i*10)*(r-5)
+		);
+    	_gfx.setTextColor(0xFFFF);
+    	_gfx.setTextSize(1);
+    	_gfx.print(currentStep,0);
+    	currentStep += step;
 	}
 }
 
@@ -188,6 +188,67 @@ void TFTGraph::drawPieChart(int x, int y, uint8_t r, float data[], int start, in
 	//draw bounding circle:
 	//gfx.drawCircle(x,y,r,0xFFFF);
 }
+
+/*void TFTGraph::drawPieChart(int x, int y, uint8_t r, float data[], int start, int end, uint16_t colors[], char names[][15]){
+	//sum all values:
+  	float sum = 0.0;
+  	for(int i = start; i < end; i++){
+    	sum += data[i];
+  	}
+
+  	float currentAngle = 0.0;
+
+  	for(int i = start; i<end; i++){
+		float angleAdd = 360.0 * (data[i] / sum);
+
+		float dx1 = InternalUtils::cosd(currentAngle);
+		float dy1 = InternalUtils::sind(currentAngle);
+		float dx2 = InternalUtils::cosd(currentAngle + angleAdd);
+		float dy2 = InternalUtils::sind(currentAngle + angleAdd);
+
+		//Only scanning the lines where the angles actually are:
+		
+		int startYPos = y-r;
+		int endYPos = y+r;
+		if(currentAngle < 180 && currentAngle+angleAdd < 180) startYPos = y;
+		if(currentAngle > 180 && currentAngle+angleAdd > 180) endYPos = y;
+		
+		for(int i2 = startYPos; i2<endYPos; i2++){
+			int dy = i2 - y;
+			float xExtent = sqrt(r*r - dy*dy);
+			
+			//start ray:
+			float t1 = (i2 - y) / dy1;
+			float x1 = x + t1 * dx1;
+
+			//end ray:
+			float t2 = (i2 - y) / dy2;
+			float x2 = x + t2 * dx2;
+
+			if (fabs(dy1) > 0.0001) {
+    			float t1 = dy / dy1;
+    			x1 = x + t1 * dx1;
+			}
+
+			if (fabs(dy2) > 0.0001) {
+    			float t2 = dy / dy2;
+    			x2 = x + t2 * dx2;
+			}
+
+			int xs = max(x - xExtent, min(x1, x2));
+			int xe = min(x + xExtent, max(x1, x2));
+
+			//draw line:
+			_gfx.drawFastHLine(
+				xs,
+				i2,
+				xe-xs,
+				colors[i]
+			);
+		}
+		currentAngle += angleAdd;
+	}
+}*/
 
 void TFTGraph::drawBarChart(int x, int y, uint16_t width, uint16_t height, float data[], float start, float end, uint16_t color){
 
