@@ -39,6 +39,9 @@ void loop() {
   tft.fillScreen(BLACK);
   gfx.drawGauge(150, 150, 128, 69.0, 0, 100, YELLOW);
   delay(5000);
+  tft.fillScreen(BLACK);
+  gfx.drawBoxPlot(32, 32, 100, 200, data, 0, sizeof(data)/sizeof(data[0]), WHITE);
+  delay(5000);
 
   uint16_t colors[] = {YELLOW, RED, ORANGE, GREEN, CYAN, YELLOW, RED, ORANGE, GREEN, CYAN};
   char names[][15] ={
