@@ -12,4 +12,5 @@ Uses the Adafruit TFTLCD low-level library to function.
 - Gauge chart
 - Pie chart
 - Scatter plot
-
+- Bar chart
+- Boxplot

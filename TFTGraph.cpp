@@ -336,3 +336,103 @@ void TFTGraph::drawScatterPlot(int x, int y, uint16_t width, uint16_t height, fl
 
   _gfx.drawRect(x,y,width+2,height+2,0xFFFF);
 }
+
+void TFTGraph::drawBoxPlot(int x, int y, uint16_t width, uint16_t height, float data[], int start, int end, uint16_t color){
+	//sorting given array:
+	InternalUtils::sortArray(data, start, end);
+
+	//calculating minimum, maximum, sum, average, mean, lower quartile and higher quartile
+	float sum = 0;
+	float minimum = data[0];
+	float maximum = data[end-1];
+	for(int i = start; i<end; i++){
+		sum += data[i];
+	}
+
+	//determining amount of empty space at top or bottom:
+	float flex = (maximum-minimum)*0.1;
+
+	InternalUtils::drawDiagramBody(_gfx, x, y, width, height, minimum-flex, maximum+flex);
+
+	float mean = sum/(end-start);
+
+	//getting median and Lower and Higher Quartile:
+	float median = InternalUtils::getMedian(data, start, end);
+
+	int mid = start + (end-start) / 2;
+	float LQ = 0;
+	float HQ = 0;
+	if((end-start) % 2 == 0){
+		LQ = InternalUtils::getMedian(data,start,mid);
+		HQ = InternalUtils::getMedian(data,mid,end);
+	}else{
+		LQ = InternalUtils::getMedian(data,start,mid);
+		HQ = InternalUtils::getMedian(data,mid+1,end);
+	}
+
+	//drawing the box:
+	//drawing the whisker (the big vertical line in the middle)
+	float relativeMaximum = 1.0-(constrain((maximum-(minimum-flex))/((maximum+flex)-(minimum-flex)),0.0,1.0));
+	float relativeMinimum = 1.0-(constrain((minimum-(minimum-flex))/((maximum-flex)-(minimum-flex)),0.0,1.0));
+	for(int i = 0; i<2/*how many pixels thick the line should be*/; i++){
+		_gfx.drawFastVLine(
+			x+(width/2)+i,
+			y+(relativeMaximum*height),
+			(relativeMinimum*height)-(relativeMaximum*height),
+			color
+		);
+	}
+
+	//drawing whisker caps:
+	//top whisker cap:
+	int whiskerWidth = width/6;
+	int whiskerX = x+((width-whiskerWidth)/2);
+	_gfx.drawFastHLine(
+		whiskerX,
+		y+(relativeMaximum*height),
+		whiskerWidth,
+		color
+	);
+	_gfx.drawFastHLine(
+		whiskerX,
+		y+(relativeMinimum*height)-1,
+		whiskerWidth,
+		color
+	);
+
+	//drawing box:
+	/*
+		1. line in the middle is median
+		2. top of box is the top quarter, while the bottom is the bottom quarter
+	*/
+	float relativeLQ = 1.0-(constrain((LQ-(minimum-flex))/((maximum+flex)-(minimum-flex)),0.0,1.0));
+	float relativeHQ = 1.0-(constrain((HQ-(minimum-flex))/((maximum+flex)-(minimum-flex)),0.0,1.0));
+
+	int boxTopY = y + (relativeHQ * height);
+	int boxBottomY = y + (relativeLQ * height);
+
+	int boxWidth = width/3;
+	int boxX = x+((width-boxWidth)/2);
+
+	_gfx.fillRect(
+		boxX,
+		boxTopY,
+		boxWidth,
+		boxBottomY-boxTopY,
+		color
+	);
+
+	//drawing line where Median is:
+	float relativeMedian = 1.0-(constrain((median-(minimum-flex))/((maximum+flex)-(minimum-flex)),0.0,1.0));
+	uint16_t medianColor = 0x0000;
+	if(color == 0x0000) medianColor = 0xFFFF;
+
+	for(int i = 0; i<2; i++){
+		_gfx.drawFastHLine(
+			boxX,
+			y+(relativeMedian*height)+i,
+			boxWidth,
+			medianColor
+		);
+	}
+}
