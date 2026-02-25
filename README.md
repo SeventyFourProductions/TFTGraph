@@ -1,5 +1,5 @@
 # TFTGraph
-A data visualizing library for TFT screens.
+A data visualizing library for TFT displays.
 
 ## Features:
 Allows you to automatically insert a fully drawn graph of your choosing into a TFT screen wired into an Arduino Uno, ESP8266 and ESP32.

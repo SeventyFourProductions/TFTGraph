@@ -385,7 +385,7 @@ void TFTGraph::drawBoxPlot(int x, int y, uint16_t width, uint16_t height, float 
 
 	//drawing whisker caps:
 	//top whisker cap:
-	int whiskerWidth = width/6;
+	int whiskerWidth = width/4;
 	int whiskerX = x+((width-whiskerWidth)/2);
 	_gfx.drawFastHLine(
 		whiskerX,
@@ -411,7 +411,7 @@ void TFTGraph::drawBoxPlot(int x, int y, uint16_t width, uint16_t height, float 
 	int boxTopY = y + (relativeHQ * height);
 	int boxBottomY = y + (relativeLQ * height);
 
-	int boxWidth = width/3;
+	int boxWidth = width/2;
 	int boxX = x+((width-boxWidth)/2);
 
 	_gfx.fillRect(
