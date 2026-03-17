@@ -17,6 +17,8 @@ class InternalUtils {
         static void sortArray(float data[], int start, int end);
 
         static float getMedian(float data[], int start, int end);
+
+        static bool isLightBackground(Adafruit_TFTLCD &gfx, int x, int y);
 };
 
 #endif

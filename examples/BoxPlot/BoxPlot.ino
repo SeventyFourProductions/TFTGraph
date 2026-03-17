@@ -1,4 +1,3 @@
-#include <math.h>
 #include <Adafruit_TFTLCD.h>
 #include <TFTGraph.h>
 
@@ -11,17 +10,37 @@ TFTGraph gfx(tft);
 void setup() {
   tft.begin(0x9325);
   tft.reset();
-  tft.setRotation(1);
 
   tft.fillScreen(BLACK);
+
+  //Synthetic exam scores dataset:
+  float data[] = {
+    72.5, 88.0, 91.5, 67.0, 85.5,
+    78.0, 94.0, 59.5, 73.0, 88.5,
+    62.0, 79.5, 84.0, 90.0, 76.5,
+    68.5, 81.0, 95.0, 70.0, 86.0
+  };
+
+  const int x = 64;
+  const int y = 32;
+  const uint16_t width = 100;
+  const uint16_t height = 200;
+  const int start = 0;
+  const int end = sizeof(data)/sizeof(data[0]);
+  const uint16_t color = 0xf800;
+  const bool drawBackground = true;
+
+  tft.setCursor(x, y-11);
+  tft.setTextColor(WHITE);
+  tft.print("Exam scores:");
+
+  /*
+  input:
+  int x, int y, uint16_t width, uint16_t height, float data[], int start, int end, uint16_t color, bool drawBackground
+  */
+
+  gfx.drawBoxPlot(x, y, width, height, data, start, end, color, drawBackground);
 }
 
 void loop() {
-  tft.fillScreen(BLACK);
-
-  float data[] = {10, 20, 32, 25, 15, 3, 2, 30, 23, 12, 17, 26, 30, 25, 15, 13, 24, 34, 26, 15};
-
-  gfx.drawBoxPlot(64, 32, 100, 200, data, 0, sizeof(data)/sizeof(data[0]), 0xf800);
-
-  delay(5000);
 }

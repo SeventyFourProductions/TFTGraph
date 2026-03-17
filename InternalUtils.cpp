@@ -12,6 +12,10 @@ double InternalUtils::cosd(double deg) {
 
 void InternalUtils::drawDiagramBody(Adafruit_TFTLCD &gfx, int x, int y, uint16_t width, uint16_t height, float min, float max){
 
+    bool isLightBackground = InternalUtils::isLightBackground(gfx, x, y);
+    uint16_t drawColor = 0xFFFF;
+    if(isLightBackground) drawColor = 0x0000;
+
     for (uint8_t i = 0; ; i++) {
         int yPos = y + i * 15;
         if (yPos > y + height) break;
@@ -25,7 +29,7 @@ void InternalUtils::drawDiagramBody(Adafruit_TFTLCD &gfx, int x, int y, uint16_t
 
         String str = String(value, 1);
         gfx.setCursor((x - 3) - (6 * str.length()), yPos - 4);
-        gfx.setTextColor(0xFFFF);
+        gfx.setTextColor(drawColor);
         gfx.setTextSize(1);
         gfx.print(value, 1);
     }
@@ -35,7 +39,7 @@ void InternalUtils::drawDiagramBody(Adafruit_TFTLCD &gfx, int x, int y, uint16_t
     gfx.print(min, 1);
 
     //drawing bounding box:
-    gfx.drawRect(x,y,width+2,height,0xFFFF);
+    gfx.drawRect(x,y,width+2,height,drawColor);
 }
 
 void InternalUtils::drawHalfCircle(Adafruit_TFTLCD &gfx, int xc, int yc, uint8_t r, uint16_t color){
@@ -67,64 +71,70 @@ void InternalUtils::drawHalfCircle(Adafruit_TFTLCD &gfx, int xc, int yc, uint8_t
 }
 
 void InternalUtils::drawScatterBody(Adafruit_TFTLCD &gfx, int x, int y, uint16_t width, uint16_t height, float xMin, float xMax, float yMin, float yMax){
-  //Horizontal:
-  for (uint8_t i = 0; ; i++) {
-    int xPos = x + i * 30;
-    if (xPos > x + width) break;
 
-    gfx.drawFastVLine(xPos,y , height, 0x8410);
+    bool isLightBackground = InternalUtils::isLightBackground(gfx, x, y);
+    uint16_t drawColor = 0xFFFF;
+    if(isLightBackground) drawColor = 0x0000;
 
-    float t = (float)(xPos - x) / width;
-    float value = xMin + t * (xMax - xMin);
+    //Horizontal:
+    for (uint8_t i = 0; ; i++) {
+        int xPos = x + i * 30;
+        if (xPos > x + width) break;
 
-	  if ((x + width) - (x+(i * 30)) < 10) break;
+        gfx.drawFastVLine(xPos,y , height, 0x8410);
 
-    String str = String(value, 1);
-    gfx.setCursor(xPos-4,y+height+10);
-    gfx.setTextColor(0xFFFF);
-    gfx.setTextSize(1);
-    gfx.print(value, 1);
-  }
+        float t = (float)(xPos - x) / width;
+        float value = xMin + t * (xMax - xMin);
 
-  gfx.drawFastVLine(x+width, y,height, 0x8410);
-  gfx.setCursor(x - 3 - 6 * String(yMin,1).length(), y + height - 4);
-  gfx.print(yMin, 1);
+	    if ((x + width) - (x+(i * 30)) < 10) break;
+
+        String str = String(value, 1);
+        gfx.setCursor(xPos-4,y+height+10);
+        gfx.setTextColor(drawColor);
+        gfx.setTextSize(1);
+        gfx.print(value, 1);
+    }
+
+    gfx.drawFastVLine(x+width, y,height, 0x8410);
+    gfx.setCursor(x - 3 - 6 * String(yMin,1).length(), y + height - 4);
+    gfx.print(yMin, 1);
   
-  //Vertical:
-  for (uint8_t i = 0; ; i++) {
-    int yPos = y + i * 15;
-    if (yPos > y + height) break;
+    //Vertical:
+    for (uint8_t i = 0; ; i++) {
+        int yPos = y + i * 15;
+        if (yPos > y + height) break;
 
-    gfx.drawFastHLine(x, yPos, width, 0x8410);
+        gfx.drawFastHLine(x, yPos, width, 0x8410);
 
-    float t = (float)(yPos - y) / height;
-    float value = yMax - t * (yMax - yMin);
+        float t = (float)(yPos - y) / height;
+        float value = yMax - t * (yMax - yMin);
 
-	  if ((y + height) - (y+(i * 15)) < 10) break;
+	    if ((y + height) - (y+(i * 15)) < 10) break;
 
-    String str = String(value, 1);
-    gfx.setCursor((x - 3) - (6 * str.length()), yPos - 4);
-    gfx.setTextColor(0xFFFF);
-    gfx.setTextSize(1);
-    gfx.print(value, 1);
-  }
+        String str = String(value, 1);
+        gfx.setCursor((x - 3) - (6 * str.length()), yPos - 4);
+        gfx.setTextColor(drawColor);
+        gfx.setTextSize(1);
+        gfx.print(value, 1);
+    }
 
-  gfx.drawFastHLine(x, y + height, width, 0x8410);
-  gfx.setCursor(x - 3 - 6 * String(yMin,1).length(), y + height - 4);
-  gfx.print(yMin, 1);
+    gfx.drawFastHLine(x, y + height, width, 0x8410);
+    gfx.setCursor(x - 3 - 6 * String(yMin,1).length(), y + height - 4);
+    gfx.print(yMin, 1);
 }
 
 void InternalUtils::sortArray(float data[], int start, int end){
-    //bubble sort, there exists much faster sorting algorithms out there but this is easy to implement:
-    for(int pass = start; pass<end; pass++){
-        for(int i = start; i<end - (pass - start)-1; i++){
-            if(data[i]>data[i+1]){
-                //swapping the numbers in the two spots:
-                float temp = data[i];
-                data[i] = data[i+1];
-                data[i+1] = temp;
-            }
+    //Insertion sort, O(n^2):
+    for(int i = 1; i<(end-start); i++){
+        float key = data[i];
+        int j = i-1;
+
+        while (j >= 0 && data[j] > key) {
+            data[j + 1] = data[j];
+            j -= 1;
         }
+
+        data[j+1] = key;
     }
 }
 
@@ -138,4 +148,12 @@ float InternalUtils::getMedian(float data[], int start, int end){
     	int mid2 = start + len/2;
     	return (data[mid1] + data[mid2]) / 2.0f;
 	}
+}
+
+//This code doesn't seem to work? I don't want the user to have to pass in the background color so this is just gonna remain returning false for now. Maybe it has something to do with the "readPixel" function?
+bool InternalUtils::isLightBackground(Adafruit_TFTLCD &gfx, int x, int y){
+    uint16_t color = gfx.readPixel(x, y);
+
+    //return color > 0x7FFF;
+    return false;
 }

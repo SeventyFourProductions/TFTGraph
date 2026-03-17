@@ -1,39 +1,64 @@
-#include <math.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_TFTLCD.h>
 #include <TFTGraph.h>
 
 #define BLACK 0x0000
 #define WHITE 0xFFFF
-#define LIGHTGRAY 0xC618
-#define GRAY 0x8410
-#define DARKGRAY 0x4208
 
 Adafruit_TFTLCD tft;
 TFTGraph gfx(tft);
-
-void fillRandomFloatArray(float arr[], uint16_t size) {
-  for (uint16_t i = 0; i < size; i++) {
-    arr[i] = sin(i/3.0)*50;
-  }
-}
 
 void setup() {
   tft.begin(0x9325);
 
   tft.reset();
-  tft.fillScreen(0x0000);
+  tft.setRotation(1);
+  tft.fillScreen(BLACK);
+
+
+  //Approximation of average monthly temperature in °C (2025), Oslo. From January to December:
+  float data[] {
+  -3.2,
+  -2.7,
+  0.4,
+  5.6,
+  10.3,
+  15.2,
+  18.4,
+  17.6,
+  11.3,
+  7.2,
+  1.1,
+  -2.8
+  };
+
+  const int x = 30;
+  const int y = 75;
+  const uint16_t width = 225;
+  const uint16_t height = 125;
+  const uint16_t start = 0;
+  const uint16_t end = sizeof(data)/sizeof(data[0]);
+  const float min = -5.0;
+  const float max = 20.0;
+  const uint8_t lineThickness = 2;
+  const uint16_t color = 0x07e0; //0x07e0 is a bright green color
+  const bool drawBackground = true;
+
+  tft.setCursor(x, y-11);
+  tft.setTextColor(WHITE);
+  tft.print("Average monthly temperature in celsius, Oslo");
+
+  /*
+  Parameters:
+  int x, int y, uint16_t width, uint16_t height, float data[], uint16_t start, uint16_t end, float min, float max, uint8_t lineThickness uint16_t color
+  */
+  gfx.drawLineDiagram(x, y, width, height, data, start, end, min, max, lineThickness, color, drawBackground);
+
+  /*
+  If you wish, you could very well add your own labels at the bottom, for every month.
+  All you need to know is that the bottom of the diagram box is (y+height).
+  */
 }
 
 void loop() {
-  float data[10];
-  fillRandomFloatArray(data, 10);
-
-  tft.setRotation(1);
-
-  tft.fillScreen(BLACK);
-
-  gfx.drawLineDiagram(50, 20, 225, 125, data, 0,10, -50, 50, 0xF456);
-
-  delay(1000);
 }

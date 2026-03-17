@@ -1,4 +1,3 @@
-#include <math.h>
 #include <Adafruit_TFTLCD.h>
 #include <TFTGraph.h>
 
@@ -28,20 +27,20 @@ void loop() {
   float data[] = {56.7,34.6,23.4,45.2,12.4,65.2,56.0,34.4,23.0,56.1};
 
   tft.fillScreen(BLACK);
-  gfx.drawPointDiagram(50,50,150,150, data,0,sizeof(data)/sizeof(data[0]),12.4,70.0, YELLOW);
-  delay(5000);
+  gfx.drawPointDiagram(50,50,150,150, data,0,sizeof(data)/sizeof(data[0]),12.4,70.0, YELLOW, true);
+  delay(2500);
   tft.fillScreen(BLACK);
-  gfx.drawLineDiagram(50,50,150,150, data,0,sizeof(data)/sizeof(data[0]),12.4,70.0, CYAN);
-  delay(5000);
+  gfx.drawLineDiagram(50,50,150,150, data,0,sizeof(data)/sizeof(data[0]),12.4,70.0, 2, CYAN, true);
+  delay(2500);
   tft.fillScreen(BLACK);
-  gfx.drawBarChart(50, 50, 150, 150, data, 0, sizeof(data)/sizeof(data[0]), GREEN);
-  delay(5000);
+  gfx.drawBarChart(50, 50, 150, 150, data, 0, sizeof(data)/sizeof(data[0]), GREEN, true);
+  delay(2500);
   tft.fillScreen(BLACK);
   gfx.drawGauge(150, 150, 128, 69.0, 0, 100, YELLOW);
-  delay(5000);
+  delay(2500);
   tft.fillScreen(BLACK);
-  gfx.drawBoxPlot(32, 32, 100, 200, data, 0, sizeof(data)/sizeof(data[0]), WHITE);
-  delay(5000);
+  gfx.drawBoxPlot(32, 32, 100, 200, data, 0, sizeof(data)/sizeof(data[0]), WHITE, true);
+  delay(2500);
 
   uint16_t colors[] = {YELLOW, RED, ORANGE, GREEN, CYAN, YELLOW, RED, ORANGE, GREEN, CYAN};
   char names[][15] ={
@@ -57,8 +56,8 @@ void loop() {
     "Maria"
   };
   tft.fillScreen(BLACK);
-  gfx.drawPieChart(150, 100, 48, data, 0, 4, colors, names);
-  delay(5000);
+  gfx.drawPieChart(150, 100, 48, data, 0, 4, 5, colors, names, true);
+  delay(2500);
 
   float data2[][3] = {
     // Group 0 (lower-left-ish, spreads upward)
@@ -97,14 +96,14 @@ void loop() {
     {5.2, 4.0, 3}
 };
   tft.fillScreen(BLACK);
-  gfx.drawScatterPlot(50, 50, 200, 150, data2, 0, sizeof(data2)/sizeof(data2[0]), colors);
-  delay(5000);
+  gfx.drawScatterPlot(50, 50, 200, 150, data2, 0, sizeof(data2)/sizeof(data2[0]), colors, true);
+  delay(2500);
 
-  //Both scatter diagram and a line diagram:
+  //Both scatter diagram, line diagram and a pie chart:
   tft.fillScreen(BLACK);
-  gfx.drawScatterPlot(50, 50, 200, 50, data2, 0, sizeof(data2)/sizeof(data2[0]), colors);
-  gfx.drawLineDiagram(50,125,150,100, data,0,sizeof(data)/sizeof(data[0]),12.4,70.0, CYAN);
-  gfx.drawPieChart(200, 100, 48, data, 0, 4, colors, names);
-  delay(15000);
+  gfx.drawScatterPlot(50, 50, 200, 50, data2, 0, sizeof(data2)/sizeof(data2[0]), colors, true);
+  gfx.drawLineDiagram(50,125,150,100, data,0,sizeof(data)/sizeof(data[0]),12.4,70.0, 2, CYAN, true);
+  gfx.drawPieChart(150, 100, 48, data, 0, 4, 5, colors, names, false);
+  delay(10000);
 }
 

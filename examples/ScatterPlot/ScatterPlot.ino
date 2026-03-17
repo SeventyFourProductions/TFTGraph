@@ -1,6 +1,8 @@
-#include <math.h>
 #include <Adafruit_TFTLCD.h>
 #include <TFTGraph.h>
+
+#define WHITE 0xFFFF
+#define BLACK 0x0000
 
 Adafruit_TFTLCD tft;
 TFTGraph gfx(tft);
@@ -10,17 +12,16 @@ void setup() {
   tft.reset();
   tft.setRotation(1);
 
-  tft.fillScreen(0x0000);
-}
-
-void loop() {
-  tft.fillScreen(0x0000);
+  tft.fillScreen(BLACK);
   /*
+  Array is sorted like this:
   1. x
   2. y
   3. color/group
   */
-float data[][3] = {
+
+  //Scatter plot dataset with absolutely no meaning:
+  const float data[][3] = {
     // Group 0 (lower-left-ish, spreads upward)
     {1.1, 2.3, 0},
     {1.4, 2.7, 0},
@@ -89,11 +90,27 @@ float data[][3] = {
     {5.9, 4.7, 3},
     {5.4, 4.2, 3}
 };
+//Groups are arbitrary, but need to be integers to properly work. The groups will get their assigned color based on the "colors" array.
 
+  const uint16_t colors[] = {0x06ff, 0xf7e0, 0xf800, 0xf81d};
 
-  uint16_t colors[] = {0x06ff, 0xf7e0, 0xf800, 0xf81d};
+  const int x = 50;
+  const int y = 30;
+  const uint16_t width = 200;
+  const uint16_t height = 150;
+  const int start = 0;
+  const int end = sizeof(data)/sizeof(data[0]);
+  const bool drawBackground = true;
 
-  gfx.drawScatterPlot(50, 30, 200, 150, data,0,sizeof(data)/sizeof(data[0]), colors);
+  tft.setCursor(x, y-11);
+  tft.setTextColor(WHITE);
+  tft.print("Scatter plot example:");
+  /*
+  input:
+  int x, int y, uint16_t width, uint16_t height, float data[][3], int start, int end, uint16_t colors[], bool drawBackground
+  */
+  gfx.drawScatterPlot(x, y, width, height, data, start, end, colors, drawBackground);
+}
 
-  delay(10000);
+void loop() {
 }

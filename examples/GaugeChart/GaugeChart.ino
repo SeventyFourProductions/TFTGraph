@@ -1,4 +1,3 @@
-#include <math.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_TFTLCD.h>
 #include <TFTGraph.h>
@@ -17,14 +16,32 @@ void setup() {
 
   tft.reset();
   tft.fillScreen(0x0000);
+  tft.setRotation(1);
 }
 
+float value = 0;
+bool dir = true;
+
 void loop() {
-  tft.setRotation(1);
+  if(value >= 5) dir = false;
+  if(value <=-5) dir = true;
+  if(dir) value += 0.5;
+  if(!dir) value -= 0.5;
+
+  const int x = 160;
+  const int y = 150;
+  const uint8_t r = 128;
+  const float min = -5;
+  const float max = 5;
+  const uint16_t color = 0x37e0;
 
   tft.fillScreen(BLACK);
 
-  gfx.drawGauge(320/2, 150, 128, 145, -400, 360, 0xF456);
+  /*
+  input:
+  int x, int y, uint8_t radius, float value, float min, float max, uint16_t color
+  */
+  gfx.drawGauge(x, y, r, value, min, max, color);
 
-  delay(1000);
+  delay(50);
 }
