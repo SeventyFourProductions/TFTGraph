@@ -15,8 +15,8 @@ void setup() {
   tft.fillScreen(BLACK);
   /*
   Array is sorted like this:
-  1. x
-  2. y
+  1. x value
+  2. y value
   3. color/group
   */
 

@@ -56,7 +56,7 @@ void loop() {
     "Maria"
   };
   tft.fillScreen(BLACK);
-  gfx.drawPieChart(150, 100, 48, data, 0, 4, 5, colors, names, true);
+  gfx.drawPieChart(150, 100, 48, data, 0, 4, 5, colors, names, 100, true);
   delay(2500);
 
   float data2[][3] = {
@@ -99,11 +99,11 @@ void loop() {
   gfx.drawScatterPlot(50, 50, 200, 150, data2, 0, sizeof(data2)/sizeof(data2[0]), colors, true);
   delay(2500);
 
-  //Both scatter diagram, line diagram and a pie chart:
+  //Scatter diagram, line diagram and a pie chart at the same time:
   tft.fillScreen(BLACK);
   gfx.drawScatterPlot(50, 50, 200, 50, data2, 0, sizeof(data2)/sizeof(data2[0]), colors, true);
   gfx.drawLineDiagram(50,125,150,100, data,0,sizeof(data)/sizeof(data[0]),12.4,70.0, 2, CYAN, true);
-  gfx.drawPieChart(150, 100, 48, data, 0, 4, 5, colors, names, false);
-  delay(10000);
+  gfx.drawPieChart(150, 100, 48, data, 0, 4, 5, colors, names, 2, false);
+  delay(7000);
 }
 

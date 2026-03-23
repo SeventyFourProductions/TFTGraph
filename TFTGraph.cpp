@@ -41,7 +41,7 @@ void TFTGraph::drawBarChart(int x, int y, uint16_t width, uint16_t height, float
   	}
 }
 
-void TFTGraph::drawBoxPlot(int x, int y, uint16_t width, uint16_t height, float data[], int start, int end, uint16_t color, bool drawBackground){
+void TFTGraph::drawBoxPlot(int x, int y, uint16_t width, uint16_t height, float data[], uint16_t start, uint16_t end, uint16_t color, bool drawBackground){
 	//sorting given array:
 	InternalUtils::sortArray(data, start, end);
 
@@ -223,7 +223,7 @@ void TFTGraph::drawLineDiagram(int x, int y, uint16_t width, uint16_t height, fl
 	}
 }
 
-void TFTGraph::drawPieChart(int x, int y, uint8_t r, float data[], int start, int end, uint8_t triangleWidth, uint16_t colors[], char names[][15], bool printNames) {
+void TFTGraph::drawPieChart(int x, int y, uint8_t r, float data[], uint16_t start, uint16_t end, uint8_t triangleWidth, uint16_t colors[], char names[][15], uint8_t selection, bool printNames) {
 	//cleaning values:
 	start = min(start, end);
 	triangleWidth = max(1, triangleWidth);
@@ -231,6 +231,14 @@ void TFTGraph::drawPieChart(int x, int y, uint8_t r, float data[], int start, in
 	bool isLightBackground = InternalUtils::isLightBackground(_gfx, x, y);
     uint16_t drawColor = 0xFFFF;
     if(isLightBackground) drawColor = 0x0000;
+
+	//Making slices stick out (explode):
+	uint8_t explodeOffset = 1;
+	bool explode = false;
+	if(selection <= end && selection >= start){
+		explode = true;
+		explodeOffset = max(r*0.15, 1); 
+	}
 
   	//sum all values:
   	float sum = 0.0;
@@ -250,19 +258,28 @@ void TFTGraph::drawPieChart(int x, int y, uint8_t r, float data[], int start, in
 		int currentTriAngle = triangleWidth;
     	for (int currentTriAngle = currentAngle; currentTriAngle < currentAngle+angleAdd; currentTriAngle += triangleWidth) {
 
+			float cosValOffset = 0;
+			float sinValOffset = 0;
+			if(selection == i){
+				float avgAng = (currentAngle+(currentAngle+angleAdd))/2.0;
+				cosValOffset = InternalUtils::cosd(avgAng)*explodeOffset;
+				sinValOffset = InternalUtils::sind(avgAng)*explodeOffset;
+			}
+
 			float cosVal1 = InternalUtils::cosd(currentTriAngle);
 			float sinVal1 = InternalUtils::sind(currentTriAngle);
 
 			float cosVal2 = InternalUtils::cosd(currentTriAngle+min(triangleWidth, (currentAngle+angleAdd)-currentTriAngle));
 			float sinVal2 = InternalUtils::sind(currentTriAngle+min(triangleWidth, (currentAngle+angleAdd)-currentTriAngle));
+			
 
 			_gfx.fillTriangle(
-				x,
-				y,
-				x+cosVal1*r,
-				y+sinVal1*r,
-				x+cosVal2*r,
-				y+sinVal2*r,
+				x+cosValOffset,
+				y+sinValOffset,
+				x+cosVal1*r+cosValOffset,
+				y+sinVal1*r+sinValOffset,
+				x+cosVal2*r+cosValOffset,
+				y+sinVal2*r+sinValOffset,
 
 				colors[i]
 			);
@@ -282,11 +299,25 @@ void TFTGraph::drawPieChart(int x, int y, uint8_t r, float data[], int start, in
 			colors[i]
 		);
 
+		if(selection == i){
+			_gfx.drawRect(
+				xPosLegend-1,
+				yPosLegend-1,
+				6,
+				6,
+				colors[i]
+			);	
+		}
+
     	//drawing text:
 		_gfx.setTextWrap(false);
     	_gfx.setCursor(xPosLegend+6 , yPosLegend-2);
     	_gfx.setTextSize(1);
-    	_gfx.setTextColor(drawColor);
+		if(selection == i){
+			_gfx.setTextColor(colors[i]);
+		}else{
+			_gfx.setTextColor(drawColor);
+		}
     	float percent = (angleAdd / 360.0) * 100.0;
 
 		bool hasName = names[i][0] != '\0';

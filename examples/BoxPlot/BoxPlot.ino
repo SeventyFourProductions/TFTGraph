@@ -25,8 +25,8 @@ void setup() {
   const int y = 32;
   const uint16_t width = 100;
   const uint16_t height = 200;
-  const int start = 0;
-  const int end = sizeof(data)/sizeof(data[0]);
+  const uint16_t start = 0;
+  const uint16_t end = sizeof(data)/sizeof(data[0]);
   const uint16_t color = 0xf800;
   const bool drawBackground = true;
 
@@ -36,7 +36,7 @@ void setup() {
 
   /*
   input:
-  int x, int y, uint16_t width, uint16_t height, float data[], int start, int end, uint16_t color, bool drawBackground
+  int x, int y, uint16_t width, uint16_t height, float data[], uint16_t start, uint16_t end, uint16_t color, bool drawBackground
   */
 
   gfx.drawBoxPlot(x, y, width, height, data, start, end, color, drawBackground);
