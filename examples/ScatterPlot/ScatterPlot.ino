@@ -92,7 +92,7 @@ void setup() {
 };
 //Groups are arbitrary, but need to be integers to properly work. The groups will get their assigned color based on the "colors" array.
 
-  const uint16_t colors[] = {0x06ff, 0xf7e0, 0xf800, 0xf81d};
+  const uint16_t colors[] = {gfx.getRGB565FromRGB888(0, 255, 0), gfx.getRGB565FromRGB888(255, 0, 0), gfx.getRGB565FromRGB888(0, 0, 255), gfx.getRGB565FromRGB888(255, 255, 0)};
 
   const int x = 50;
   const int y = 30;

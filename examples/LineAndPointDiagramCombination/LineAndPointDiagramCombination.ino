@@ -40,16 +40,18 @@ void setup() {
   const float min = -1;
   const float max = 26;
   const uint8_t lineThickness = 1;
-  const uint16_t color = 0x07e0; //0x07e0 is a bright green color.
-  const uint16_t color2 = 0x07fe; //0x07fe is cyan.
+  const bool drawBackground = true;
+  const bool fill = false;
+  const uint16_t color = gfx.getRGB565FromRGB888(0, 255, 0);
+  const uint16_t color2 = gfx.getRGB565FromRGB888(0, 255, 255);
 
   tft.setCursor(x, y-11);
   tft.setTextColor(WHITE);
   tft.print("Random dataset:");
 
   //the first diagram draws the background, and every subsequent diagram on top needs to have the background disabled:
-  gfx.drawLineDiagram(x, y, width, height, data, start, end, min, max, lineThickness, color, true);
-  gfx.drawPointDiagram(x, y, width, height, data, start, end, min, max, color2, false);
+  gfx.drawLineDiagram(x, y, width, height, data, start, end, min, max, lineThickness, color, drawBackground, fill);
+  gfx.drawPointDiagram(x, y, width, height, data, start, end, min, max, color2, !drawBackground);
 }
 
 void loop() {

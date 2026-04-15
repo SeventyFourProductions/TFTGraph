@@ -41,22 +41,23 @@ void setup() {
   const float min = -5.0;
   const float max = 20.0;
   const uint8_t lineThickness = 2;
-  const uint16_t color = 0x07e0; //0x07e0 is a bright green color
+  const uint16_t color = gfx.getRGB565FromRGB888(0, 255, 0);
   const bool drawBackground = true;
+  const bool fill = false;
 
   tft.setCursor(x, y-11);
   tft.setTextColor(WHITE);
   tft.print("Average monthly temperature in celsius, Oslo");
 
   /*
-  Parameters:
-  int x, int y, uint16_t width, uint16_t height, float data[], uint16_t start, uint16_t end, float min, float max, uint8_t lineThickness uint16_t color
+  Input:
+  int x, int y, uint16_t width, uint16_t height, float data[], uint16_t start, uint16_t end, float min, float max, uint8_t lineThickness, uint16_t color, bool drawBackground, bool fill
   */
-  gfx.drawLineDiagram(x, y, width, height, data, start, end, min, max, lineThickness, color, drawBackground);
+  gfx.drawLineDiagram(x, y, width, height, data, start, end, min, max, lineThickness, color, drawBackground, fill);
 
   /*
   If you wish, you could very well add your own labels at the bottom, for every month.
-  All you need to know is that the bottom of the diagram box is (y+height).
+  All you need to know is that the y-position of the bottom of the diagram is (y+height).
   */
 }
 

@@ -19,7 +19,7 @@ void setup(){
   uint16_t dataSize = sizeof(data) / sizeof(data[0]);
 
   //The list of names and colors must be in the same order as the data the name and color represents:
-  uint16_t colors[] = {0x0015, 0xFD20, 0x07E0, 0xFFE0, 0x8410};
+  uint16_t colors[] = {gfx.getRGB565FromRGB888(0, 0, 150), gfx.getRGB565FromRGB888(255, 170, 0), gfx.getRGB565FromRGB888(0, 255, 0), gfx.getRGB565FromRGB888(255, 255, 0), gfx.getRGB565FromRGB888(150, 150, 150)};
   char names[][15] = {
     "Sleep",
     "Work/school",
@@ -29,7 +29,8 @@ void setup(){
   };
 
   /*
-  <int x, int y, uint8_t radius, float data[], uint16_t start, uint16_t end, int triangleWidth, uint16_t colors, char names[][15], uint8_t selection, bool printNames>
+  Input:
+  int x, int y, uint8_t radius, float data[], uint16_t start, uint16_t end, int triangleWidth, uint16_t colors, char names[][15], uint8_t selection, bool printNames
 
   "triangleWidth" describes how wide (in degrees) each triangle that makes up a full pie chart is. Bigger numbers draw the pie chart faster, in exchange for quality.
   If "selection" is between the "start" and "end" value the given pie slice will be highlighted and selected. If the value is outside of the bounds then none of the slices are selected.
@@ -39,7 +40,7 @@ void setup(){
   const int y = 100;
   const uint8_t r = 64;
   const uint16_t start = 0;
-  const uint8_t selection = 1;
+  const uint8_t selection = 3;
   const bool printNames = true;
   const int triangleWidth = 10;
 

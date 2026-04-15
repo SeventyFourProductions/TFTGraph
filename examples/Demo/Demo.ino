@@ -1,26 +1,26 @@
 #include <Adafruit_TFTLCD.h>
 #include <TFTGraph.h>
 
-#define BLACK 0x0000
-#define WHITE 0xFFFF
-#define LIGHTGRAY 0xC618
-#define GRAY 0x8410
-#define DARKGRAY 0x4208
-#define YELLOW 0xf7e0
-#define RED 0xf800
-#define ORANGE 0xfe00
-#define GREEN 0x07e2
-#define CYAN 0x07df
-
 Adafruit_TFTLCD tft;
 TFTGraph gfx(tft);
+
+#define BLACK gfx.getRGB565FromRGB888(0, 0, 0)
+#define WHITE gfx.getRGB565FromRGB888(255, 255, 255)
+#define LIGHTGRAY gfx.getRGB565FromRGB888(190, 190, 190)
+#define GRAY gfx.getRGB565FromRGB888(100, 100, 100)
+#define DARKGRAY gfx.getRGB565FromRGB888(50, 50, 50)
+#define YELLOW gfx.getRGB565FromRGB888(255, 255, 0)
+#define RED gfx.getRGB565FromRGB888(255, 0, 0)
+#define ORANGE gfx.getRGB565FromRGB888(255, 165, 0)
+#define GREEN gfx.getRGB565FromRGB888(0, 255, 0)
+#define CYAN gfx.getRGB565FromRGB888(0, 255, 255)
 
 void setup() {
   tft.begin(0x9325);
   tft.reset();
   tft.setRotation(1);
 
-  tft.fillScreen(0x0000);
+  tft.fillScreen(BLACK);
 }
 
 void loop() {
@@ -30,7 +30,7 @@ void loop() {
   gfx.drawPointDiagram(50,50,150,150, data,0,sizeof(data)/sizeof(data[0]),12.4,70.0, YELLOW, true);
   delay(2500);
   tft.fillScreen(BLACK);
-  gfx.drawLineDiagram(50,50,150,150, data,0,sizeof(data)/sizeof(data[0]),12.4,70.0, 2, CYAN, true);
+  gfx.drawLineDiagram(50,50,150,150, data,0,sizeof(data)/sizeof(data[0]),12.4,70.0, 2, CYAN, true, false);
   delay(2500);
   tft.fillScreen(BLACK);
   gfx.drawBarChart(50, 50, 150, 150, data, 0, sizeof(data)/sizeof(data[0]), GREEN, true);
@@ -102,7 +102,7 @@ void loop() {
   //Scatter diagram, line diagram and a pie chart at the same time:
   tft.fillScreen(BLACK);
   gfx.drawScatterPlot(50, 50, 200, 50, data2, 0, sizeof(data2)/sizeof(data2[0]), colors, true);
-  gfx.drawLineDiagram(50,125,150,100, data,0,sizeof(data)/sizeof(data[0]),12.4,70.0, 2, CYAN, true);
+  gfx.drawLineDiagram(50,125,150,100, data,0,sizeof(data)/sizeof(data[0]),12.4,70.0, 2, CYAN, true, false);
   gfx.drawPieChart(150, 100, 48, data, 0, 4, 5, colors, names, 2, false);
   delay(7000);
 }

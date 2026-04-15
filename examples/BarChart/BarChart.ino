@@ -35,7 +35,7 @@ void setup() {
   const uint16_t height = 190;
   const int start = 0;
   const int end = sizeof(data)/sizeof(data[0]);
-  const uint16_t color = 0xFF45;
+  const uint16_t color = gfx.getRGB565FromRGB888(255, 200, 0);
   const bool drawBackground = true;
 
   tft.setCursor(x, y-11);
@@ -48,6 +48,17 @@ void setup() {
   */
 
   gfx.drawBarChart(x, y, width, height, data, start, end, color, drawBackground);
+
+
+
+
+
+
+
+
+  gfx.drawScatterPlot(int x, int y, uint16_t width, uint16_t height, float (*data)[3], int start, int end, uint16_t *colors, bool drawBackground)
+
+
 }
 
 void loop() {

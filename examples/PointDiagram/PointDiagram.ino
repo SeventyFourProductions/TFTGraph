@@ -39,7 +39,7 @@ void setup() {
   const uint16_t end = sizeof(data)/sizeof(data[0]);
   const float min = -1.0;
   const float max = 7.0;
-  const uint16_t color = 0x07e0; //0x07e0 is a bright green color
+  const uint16_t color = gfx.getRGB565FromRGB888(0, 255, 0);
   const bool drawBackground = true;
 
   tft.setCursor(x, y-11);

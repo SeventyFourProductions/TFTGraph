@@ -27,7 +27,7 @@ void setup() {
   const uint16_t height = 200;
   const uint16_t start = 0;
   const uint16_t end = sizeof(data)/sizeof(data[0]);
-  const uint16_t color = 0xf800;
+  const uint16_t color = gfx.getRGB565FromRGB888(255, 0, 0);
   const bool drawBackground = true;
 
   tft.setCursor(x, y-11);

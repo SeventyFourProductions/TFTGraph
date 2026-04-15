@@ -188,7 +188,7 @@ void TFTGraph::drawGauge(int x, int y, uint8_t r, float value, float min, float 
 	}
 }
 
-void TFTGraph::drawLineDiagram(int x, int y, uint16_t width, uint16_t height, float data[], uint16_t start, uint16_t end, float min, float max, uint8_t lineThickness, uint16_t color, bool drawBackground){
+void TFTGraph::drawLineDiagram(int x, int y, uint16_t width, uint16_t height, float data[], uint16_t start, uint16_t end, float min, float max, uint8_t lineThickness, uint16_t color, bool drawBackground, bool fill){
 
   	//"Cleaning" some values:
   	start = min(start, end);
@@ -201,7 +201,7 @@ void TFTGraph::drawLineDiagram(int x, int y, uint16_t width, uint16_t height, fl
   	int oldY = 0;
   	int newX = 0;
   	int newY = 0;
-  	//iterating through data, drawing lines on screen:
+  	//Iterating through data, drawing lines on screen:
   	for(uint16_t i = start; i<end; i++){
     	// ( value-minimum ) / ( maximum-minimum )
     	float relativePos = 1.0-(constrain((data[i]-min)/(max-min),0.0,1.0));
@@ -215,9 +215,34 @@ void TFTGraph::drawLineDiagram(int x, int y, uint16_t width, uint16_t height, fl
       		newX = x + 1 + (int)(((float)(i - start) * (width - 2)) / ((end - start) - 1) + 0.5);
       		newY = y+7+((height-10)*relativePos);
 
+			int yBottom = (y+height)-2;
+
+			if(fill){
+				//draw two triangles (a polygon or quart) to fill below the current iteration of line:
+				_gfx.fillTriangle(
+					oldX,
+					oldY,
+					newX,
+					newY,
+					oldX,
+					yBottom,
+					color
+				);
+				_gfx.fillTriangle(
+					newX,
+					newY,
+					newX,
+					yBottom,
+					oldX,
+					yBottom,
+					color
+				);
+			}
+
 			for(uint16_t i2 = 0; i2<lineThickness; i2++){
-				if(i2 % 2 == 0) _gfx.drawLine(oldX,constrain(oldY+(i2/2), y, y+height),newX,constrain(newY+(i2/2), y, y+height),color);
-				if(i2 % 2 != 0)	_gfx.drawLine(oldX,constrain(oldY-(i2/2), y, y+height),newX,constrain(newY-(i2/2), y, y+height),color);
+
+				if(i2 % 2 == 0) _gfx.drawLine(oldX,constrain(oldY+(i2/2), y, yBottom),newX,constrain(newY+(i2/2), y, yBottom),color);
+				if(i2 % 2 != 0)	_gfx.drawLine(oldX,constrain(oldY-(i2/2), y, yBottom),newX,constrain(newY-(i2/2), y, yBottom),color);
 			}
     	}
 	}
@@ -412,4 +437,12 @@ void TFTGraph::drawScatterPlot(int x, int y, uint16_t width, uint16_t height, fl
     	);
   	}
   	if(drawBackground) _gfx.drawRect(x,y,width+2,height+2,drawColor);
+}
+
+uint16_t TFTGraph::getRGB565FromRGB888(uint8_t r, uint8_t g, uint8_t b){
+	uint8_t R5 = (r >> 3);
+	uint8_t G6 = (g >> 2);
+	uint8_t B5 = (b >> 3);
+
+	return ((R5 << 11) | (G6 << 5)) | B5;
 }
