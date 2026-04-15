@@ -27,11 +27,15 @@ The names here are arbitrary, but for this example; `Adafruit TFTLCD` is `tft` a
 
 ### Creating graphs/diagrams:
 By simply typing "`gfx.`" a list of all drawable graphs appear, as well as a `RGB888` to `RGB565` converter.
+
 ![Getting list of all graphs](extras/creating_graphs.jpg)
-When you click one of these options, the function call for this diagram appears:
+
+When you click one of these options, the function call for that diagram appears, here is for example the function call for `drawScatterPlot`:
 ```c
 gfx.drawScatterPlot(int x, int y, uint16_t width, uint16_t height, float (*data)[3], int start, int end, uint16_t *colors, bool drawBackground)
 ```
 And here you can add in the values with the given datatypes and see a diagram appear on the TFT screen! All of the graphs use floats in an array to display a dataset, the scatter-plot is unique in that it requires a 2-dimensional array with more information. It is recommended to look at the examples provided in the library to see the use-cases and how to utilize the library.
+
+Important to note that graphs can be combined as shown in the examples `LineAndPointDiagramCombination` and `StackedAreaGraph`. This is easy to do as you can disable background drawing when drawing a graph, making overlapping graphs possible.
 
 Also notice the `getRGB565FromRGB888()` function. Pass in the traditional 8-bit RGB values into the functions to get the unsigned 16-bit integer color value required in all of the graphs.
