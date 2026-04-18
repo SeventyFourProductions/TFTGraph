@@ -440,6 +440,7 @@ void TFTGraph::drawScatterPlot(int x, int y, uint16_t width, uint16_t height, fl
 }
 
 uint16_t TFTGraph::getRGB565FromRGB888(uint8_t r, uint8_t g, uint8_t b){
+	//Noticing some inaccuracies with the colour ((255,0,0) doesn't return brightest red.) due to how this is implemented, unaware if there exists a better solution.
 	uint8_t R5 = (r >> 3);
 	uint8_t G6 = (g >> 2);
 	uint8_t B5 = (b >> 3);

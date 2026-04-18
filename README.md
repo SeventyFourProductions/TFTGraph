@@ -4,7 +4,7 @@ A data visualizing library for TFT displays.
 ## Features:
 Allows you to automatically insert a fully drawn graph of your choosing into a TFT screen wired into an Arduino Uno, ESP8266 and ESP32.
 
-Uses the Adafruit TFTLCD library to function.
+Uses the [Adafruit TFTLCD library](https://github.com/adafruit/TFTLCD-Library) to function.
 
 ### Currently available graphs:
 - Bar chart
@@ -39,3 +39,6 @@ And here you can add in the values with the given datatypes and see a diagram ap
 Important to note that graphs can be combined as shown in the examples `LineAndPointDiagramCombination` and `StackedAreaGraph`. This is easy to do as you can disable background drawing when drawing a graph, making overlapping graphs possible.
 
 Also notice the `getRGB565FromRGB888()` function. Pass in the traditional 8-bit RGB values into the functions to get the unsigned 16-bit integer color value required in all of the graphs.
+
+## Contact/Help:
+If you want to suggest a new graph or diagram to add to this library, please do [send an email](mailto:nick.awsome74@gmail.com)! This project is also open-source, so feel free to add one yourself using the already established modular function setup. :)

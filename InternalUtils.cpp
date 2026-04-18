@@ -152,7 +152,7 @@ float InternalUtils::getMedian(float data[], int start, int end){
 
 //This code doesn't seem to work? I don't want the user to have to pass in the background color so this is just gonna remain returning false for now. Maybe it has something to do with the "readPixel" function?
 bool InternalUtils::isLightBackground(Adafruit_TFTLCD &gfx, int x, int y){
-    uint16_t color = gfx.readPixel(x, y);
+    //uint16_t color = gfx.readPixel(x, y);
 
     //return color > 0x7FFF;
     return false;
