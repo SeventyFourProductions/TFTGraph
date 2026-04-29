@@ -42,3 +42,5 @@ Also notice the `getRGB565FromRGB888()` function. Pass in the traditional 8-bit 
 
 ## Contact/Help:
 If you want to suggest a new graph or diagram to add to this library, please do [send an email](mailto:nick.awsome74@gmail.com)! This project is also open-source, so feel free to add one yourself using the already established modular function setup. :)
+
+This library was built as a part of a bachelor project for IT and management spring 2026 in the [University of South-Eastern Norway](https://www.usn.no/). The idea is attributed to our professor Lasse Berntzen.
