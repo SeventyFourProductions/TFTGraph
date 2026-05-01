@@ -21,25 +21,29 @@ void setup() {
   tft.setRotation(1);
 
   tft.fillScreen(BLACK);
+  gfx.drawForLightBackground = false;
 }
+
+//FALSE == 0, TRUE == 1 :) White on a white background isn't very visible, so this needs to be done:
+const uint16_t backgroundColor[2] = {BLACK, WHITE};
 
 void loop() {
   float data[] = {56.7,34.6,23.4,45.2,12.4,65.2,56.0,34.4,23.0,56.1};
 
-  tft.fillScreen(BLACK);
+  tft.fillScreen(backgroundColor[gfx.drawForLightBackground]);
   gfx.drawPointDiagram(50,50,150,150, data,0,sizeof(data)/sizeof(data[0]),12.4,70.0, YELLOW, true);
   delay(2500);
-  tft.fillScreen(BLACK);
+  tft.fillScreen(backgroundColor[gfx.drawForLightBackground]);
   gfx.drawLineDiagram(50,50,150,150, data,0,sizeof(data)/sizeof(data[0]),12.4,70.0, 2, CYAN, true, false);
   delay(2500);
-  tft.fillScreen(BLACK);
+  tft.fillScreen(backgroundColor[gfx.drawForLightBackground]);
   gfx.drawBarChart(50, 50, 150, 150, data, 0, sizeof(data)/sizeof(data[0]), GREEN, true);
   delay(2500);
-  tft.fillScreen(BLACK);
+  tft.fillScreen(backgroundColor[gfx.drawForLightBackground]);
   gfx.drawGauge(150, 150, 128, 69.0, 0, 100, YELLOW);
   delay(2500);
-  tft.fillScreen(BLACK);
-  gfx.drawBoxPlot(32, 32, 100, 200, data, 0, sizeof(data)/sizeof(data[0]), WHITE, true);
+  tft.fillScreen(backgroundColor[gfx.drawForLightBackground]);
+  gfx.drawBoxPlot(32, 32, 100, 200, data, 0, sizeof(data)/sizeof(data[0]), RED, true);
   delay(2500);
 
   uint16_t colors[] = {YELLOW, RED, ORANGE, GREEN, CYAN, YELLOW, RED, ORANGE, GREEN, CYAN};
@@ -55,7 +59,7 @@ void loop() {
     "TEMU",
     "Maria"
   };
-  tft.fillScreen(BLACK);
+  tft.fillScreen(backgroundColor[gfx.drawForLightBackground]);
   gfx.drawPieChart(150, 100, 48, data, 0, 4, 5, colors, names, 100, true);
   delay(2500);
 
@@ -95,15 +99,18 @@ void loop() {
     {5.6, 4.5, 3},
     {5.2, 4.0, 3}
 };
-  tft.fillScreen(BLACK);
+  tft.fillScreen(backgroundColor[gfx.drawForLightBackground]);
   gfx.drawScatterPlot(50, 50, 200, 150, data2, 0, sizeof(data2)/sizeof(data2[0]), colors, true);
   delay(2500);
 
   //Scatter diagram, line diagram and a pie chart at the same time:
-  tft.fillScreen(BLACK);
+  tft.fillScreen(backgroundColor[gfx.drawForLightBackground]);
   gfx.drawScatterPlot(50, 50, 200, 50, data2, 0, sizeof(data2)/sizeof(data2[0]), colors, true);
   gfx.drawLineDiagram(50,125,150,100, data,0,sizeof(data)/sizeof(data[0]),12.4,70.0, 2, CYAN, true, false);
   gfx.drawPieChart(150, 100, 48, data, 0, 4, 5, colors, names, 2, false);
   delay(7000);
+  
+  //reverse the colors at the end of a loop:
+  gfx.drawForLightBackground = !gfx.drawForLightBackground;
 }
 

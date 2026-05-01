@@ -35,6 +35,7 @@ void setup() {
     53, 54, 56, 58, 57, 56, 54, 53, 51, 50
   };
 
+  gfx.drawForLightBackground = false;
   const int x = 40;
   const int y = 30;
   const uint16_t width = 270;

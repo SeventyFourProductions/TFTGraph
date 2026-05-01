@@ -94,6 +94,7 @@ void setup() {
 
   const uint16_t colors[] = {gfx.getRGB565FromRGB888(0, 255, 0), gfx.getRGB565FromRGB888(255, 0, 0), gfx.getRGB565FromRGB888(0, 0, 255), gfx.getRGB565FromRGB888(255, 255, 0)};
 
+  gfx.drawForLightBackground = false;
   const int x = 50;
   const int y = 30;
   const uint16_t width = 200;

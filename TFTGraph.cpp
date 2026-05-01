@@ -3,6 +3,8 @@
 #include "TFTGraph.h"
 #include "InternalUtils.h"
 
+bool TFTGraph::drawForLightBackground = false;
+
 void TFTGraph::drawBarChart(int x, int y, uint16_t width, uint16_t height, float data[], float start, float end, uint16_t color, bool drawBackground){
 
 	//cleaning values:

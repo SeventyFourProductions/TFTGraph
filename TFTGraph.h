@@ -14,7 +14,11 @@
 
 class TFTGraph {
     public:
-        TFTGraph(Adafruit_TFTLCD &gfx) : _gfx(gfx) {};
+        TFTGraph(Adafruit_TFTLCD &gfx) : _gfx(gfx) {}; //Constructor
+
+        //if true = draw all borders using black instead of white.
+        //this is a "temporary" solution as the "readPixel" function can't be utilized.
+        static bool drawForLightBackground;
 
         //--------------->
         void drawBarChart(int x, int y, uint16_t width, uint16_t height, float data[], float start, float end, uint16_t color, bool drawBackground);

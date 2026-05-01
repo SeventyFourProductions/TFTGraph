@@ -26,7 +26,7 @@ TFTGraph gfx(tft);
 The names here are arbitrary, but for this example; `Adafruit TFTLCD` is `tft` and `TFTGraph` is `gfx`.
 
 ### Creating graphs/diagrams:
-By simply typing "`gfx.`" a list of all drawable graphs appear, as well as a `RGB888` to `RGB565` converter.
+By simply typing "`gfx.`" a list of all drawable graphs appear, as well as a `RGB888` to `RGB565` converter and a global boolean called `drawForLightBackground`.
 
 ![Getting list of all graphs](extras/creating_graphs.jpg)
 
@@ -39,6 +39,12 @@ And here you can add in the values with the given datatypes and see a diagram ap
 Important to note that graphs can be combined as shown in the examples `LineAndPointDiagramCombination` and `StackedAreaGraph`. This is easy to do as you can disable background drawing when drawing a graph, making overlapping graphs possible.
 
 Also notice the `getRGB565FromRGB888()` function. Pass in the traditional 8-bit RGB values into the functions to get the unsigned 16-bit integer color value required in all of the graphs.
+
+If you want to utilize a light background (like pure white) for the diagrams to be drawn in front of, you can set the boolean `drawForLightBackground` to `true`. This can be done like this:
+```c++
+gfx.drawForLightBackground = true;
+```
+This sets the primary colors of borders and text to black instead of white, making them contrast with the background.
 
 ## Contact/Help:
 If you want to suggest a new graph or diagram to add to this library, please do [send an email](mailto:nick.awsome74@gmail.com)! This project is also open-source, so feel free to add one yourself using the already established modular function setup. :)

@@ -12,7 +12,7 @@ void setup() {
   tft.reset();
   tft.setRotation(1);
 
-  tft.fillScreen(BLACK);
+  tft.fillScreen(WHITE);
 
   //synthetic game rating distribution dataset:
   float data[] = {
@@ -29,6 +29,8 @@ void setup() {
     0.8   // 10
   };
 
+  //if you want to draw with a white (or light) background, set global boolean "drawForLightBackground" to true:
+  gfx.drawForLightBackground = true;
   const int x = 40;
   const int y = 30;
   const uint16_t width = 270;
@@ -48,17 +50,6 @@ void setup() {
   */
 
   gfx.drawBarChart(x, y, width, height, data, start, end, color, drawBackground);
-
-
-
-
-
-
-
-
-  gfx.drawScatterPlot(int x, int y, uint16_t width, uint16_t height, float (*data)[3], int start, int end, uint16_t *colors, bool drawBackground)
-
-
 }
 
 void loop() {

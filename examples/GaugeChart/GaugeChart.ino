@@ -15,8 +15,10 @@ void setup() {
   tft.begin(0x9325);
 
   tft.reset();
-  tft.fillScreen(0x0000);
+  tft.fillScreen(BLACK);
   tft.setRotation(1);
+
+  gfx.drawForLightBackground = false;
 }
 
 float value = 0;

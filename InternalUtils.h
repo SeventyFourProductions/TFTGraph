@@ -5,6 +5,7 @@
 
 class InternalUtils {
     public:
+        //---->
         static double sind(double deg);
         static double cosd(double deg);
 
@@ -19,6 +20,7 @@ class InternalUtils {
         static float getMedian(float data[], int start, int end);
 
         static bool isLightBackground(Adafruit_TFTLCD &gfx, int x, int y);
+        //<----
 };
 
 #endif

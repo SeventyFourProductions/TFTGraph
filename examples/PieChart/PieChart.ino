@@ -36,6 +36,7 @@ void setup(){
   If "selection" is between the "start" and "end" value the given pie slice will be highlighted and selected. If the value is outside of the bounds then none of the slices are selected.
   */
 
+  gfx.drawForLightBackground = false;
   const int x = 100;
   const int y = 100;
   const uint8_t r = 64;

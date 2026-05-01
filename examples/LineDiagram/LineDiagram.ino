@@ -32,6 +32,7 @@ void setup() {
   -2.8
   };
 
+  gfx.drawForLightBackground = false;
   const int x = 30;
   const int y = 75;
   const uint16_t width = 225;
