@@ -31,20 +31,20 @@ The names here are arbitrary, but for this example; `Adafruit TFTLCD` is `tft` a
 ### Creating graphs/diagrams:
 Here are a list of all TFTGraph class members accessible through this gfx object:
 
-```c
-- drawBarChart(int x, int y, uint16_t width, uint16_t height, float data[], float start, float end, uint16_t color, bool drawBackground)
-- drawBoxPlot(int x, int y, uint16_t width, uint16_t height, float data[], uint16_t start, uint16_t end, uint16_t color, bool drawBackground)
-- drawGauge(int x, int y, uint8_t r, float value, float min, float max, uint16_t color)
-- drawLineDiagram(int x, int y, uint16_t width, uint16_t height, float data[], uint16_t start, uint16_t end, float min, float max, uint8_t lineThickness, uint16_t color, bool drawBackground, bool fill)
-- drawPieChart(int x, int y, uint8_t r, float data[], uint16_t start, uint16_t end, uint8_t triangleWidth, uint16_t colors[], char names[][15], uint8_t selection, bool printNames)
-- drawPointDiagram(int x, int y, uint16_t width, uint16_t height, float data[], uint16_t start, uint16_t end, float min, float max, uint16_t color, bool drawBackground)
-- drawScatterPlot(int x, int y, uint16_t width, uint16_t height, float data[][3], int start, int end, uint16_t colors[], bool drawBackground)
+**Functions:**
+- `void drawBarChart(int x, int y, uint16_t width, uint16_t height, float data[], float start, float end, uint16_t color, bool drawBackground)`
+- `void drawBoxPlot(int x, int y, uint16_t width, uint16_t height, float data[], uint16_t start, uint16_t end, uint16_t color, bool drawBackground)`
+- `void drawGauge(int x, int y, uint8_t r, float value, float min, float max, uint16_t color)`
+- `void drawLineDiagram(int x, int y, uint16_t width, uint16_t height, float data[], uint16_t start, uint16_t end, float min, float max, uint8_t lineThickness, uint16_t color, bool drawBackground, bool fill)`
+- `void drawPieChart(int x, int y, uint8_t r, float data[], uint16_t start, uint16_t end, uint8_t triangleWidth, uint16_t colors[], char names[][15], uint8_t selection, bool printNames)`
+- `void drawPointDiagram(int x, int y, uint16_t width, uint16_t height, float data[], uint16_t start, uint16_t end, float min, float max, uint16_t color, bool drawBackground)`
+- `void drawScatterPlot(int x, int y, uint16_t width, uint16_t height, float data[][3], int start, int end, uint16_t colors[], bool drawBackground)`
+- `uint16_t getRGB565FromRGB888(uint8_t r, uint8_t g, uint8_t b)`
 
-- uint16_t getRGB565FromRGB888(uint8_t r, uint8_t g, uint8_t b)
-- bool drawForLightBackground
-```
+**Variables:**
+- `bool drawForLightBackground (default is false.)`
 
-By simply typing "`gfx.`" this list of all drawable graphs should also appear, as well as a `RGB888` to `RGB565` converter and a global boolean called `drawForLightBackground`.
+By simply typing `gfx.` this list of all drawable graphs should also appear, along with a converter between `RGB888` (24-bit) to `RGB565` (16-bit) color formats, and a global boolean called `drawForLightBackground`.
 
 By adding in the values with the given datatypes into one of the methods displayed, you should be able to see a diagram appear on the TFT screen! All of the graphs use floats in an array to display a dataset, the scatter-plot is unique in that it requires a 2-dimensional array with more information. It is recommended to look at the examples provided in the library to see the use-cases and how to utilize the library.
 
