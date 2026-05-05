@@ -18,23 +18,35 @@ Uses the [Adafruit TFTLCD library](https://github.com/adafruit/TFTLCD-Library) t
 An `RGB888 (24-bit)` to `RGB565 (16-bit unsigned integer)` colour converter is also available.
 
 ## How to use:
-First, initialize the Adafruit TFTLCD Library as an object and pass it into the initialization of TFTGraph:
+First, include and initialize the Adafruit TFTLCD Library as an object and pass it into the initialization of TFTGraph:
 ```c
+#include <Adafruit_TFTLCD.h>
+#include <TFTGraph.h>
+
 Adafruit_TFTLCD tft;
 TFTGraph gfx(tft);
 ```
 The names here are arbitrary, but for this example; `Adafruit TFTLCD` is `tft` and `TFTGraph` is `gfx`.
 
 ### Creating graphs/diagrams:
-By simply typing "`gfx.`" a list of all drawable graphs appear, as well as a `RGB888` to `RGB565` converter and a global boolean called `drawForLightBackground`.
+Here are a list of all TFTGraph class members accessible through this gfx object:
 
-![Getting list of all graphs](extras/creating_graphs.jpg)
-
-When you click one of these options, the function call for that diagram appears, here is for example the function call for `drawScatterPlot`:
 ```c
-gfx.drawScatterPlot(int x, int y, uint16_t width, uint16_t height, float (*data)[3], int start, int end, uint16_t *colors, bool drawBackground)
+- drawBarChart(int x, int y, uint16_t width, uint16_t height, float data[], float start, float end, uint16_t color, bool drawBackground)
+- drawBoxPlot(int x, int y, uint16_t width, uint16_t height, float data[], uint16_t start, uint16_t end, uint16_t color, bool drawBackground)
+- drawGauge(int x, int y, uint8_t r, float value, float min, float max, uint16_t color)
+- drawLineDiagram(int x, int y, uint16_t width, uint16_t height, float data[], uint16_t start, uint16_t end, float min, float max, uint8_t lineThickness, uint16_t color, bool drawBackground, bool fill)
+- drawPieChart(int x, int y, uint8_t r, float data[], uint16_t start, uint16_t end, uint8_t triangleWidth, uint16_t colors[], char names[][15], uint8_t selection, bool printNames)
+- drawPointDiagram(int x, int y, uint16_t width, uint16_t height, float data[], uint16_t start, uint16_t end, float min, float max, uint16_t color, bool drawBackground)
+- drawScatterPlot(int x, int y, uint16_t width, uint16_t height, float data[][3], int start, int end, uint16_t colors[], bool drawBackground)
+
+- uint16_t getRGB565FromRGB888(uint8_t r, uint8_t g, uint8_t b)
+- bool drawForLightBackground
 ```
-And here you can add in the values with the given datatypes and see a diagram appear on the TFT screen! All of the graphs use floats in an array to display a dataset, the scatter-plot is unique in that it requires a 2-dimensional array with more information. It is recommended to look at the examples provided in the library to see the use-cases and how to utilize the library.
+
+By simply typing "`gfx.`" this list of all drawable graphs should also appear, as well as a `RGB888` to `RGB565` converter and a global boolean called `drawForLightBackground`.
+
+By adding in the values with the given datatypes into one of the methods displayed, you should be able to see a diagram appear on the TFT screen! All of the graphs use floats in an array to display a dataset, the scatter-plot is unique in that it requires a 2-dimensional array with more information. It is recommended to look at the examples provided in the library to see the use-cases and how to utilize the library.
 
 Important to note that graphs can be combined as shown in the examples `LineAndPointDiagramCombination` and `StackedAreaGraph`. This is easy to do as you can disable background drawing when drawing a graph, making overlapping graphs possible.
 

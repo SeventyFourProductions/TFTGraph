@@ -41,7 +41,7 @@ void setup() {
   const bool drawBackground = true;
 
   tft.setCursor(x, y-11);
-  tft.setTextColor(WHITE);
+  tft.setTextColor(BLACK);
   tft.print("Game rating distribution:");
 
   /*
